@@ -1,0 +1,29 @@
+image: node:14.15.0-stretch
+
+stages:
+   - build
+   - test
+
+install_dependencies:
+   stage: build
+   script:
+      #- npm install --global yarn
+      - yarn install
+   artifacts:
+      paths:
+         - node_modules
+   cache:
+      key:
+         files:
+           - yarn.lock
+      paths:
+         - node_modules
+
+run_test:
+   stage: test
+   script: CI=true yarn test
+
+unit_test:
+   stage: test
+   script: echo "This is a unit test"
+   
