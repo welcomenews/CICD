@@ -12,3 +12,26 @@ deploy-to-review:
   only:
     - develop
     - docker
+==============================================
+
+variables:
+  SSH_PRIVATE_KEY: $PRIVATE_KEY
+  SSH_KNOWN_HOSTS: $KNOWN_HOSTS
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+test:
+  stage: test
+  script:
+    - npm test
+deploy:
+  stage: deploy
+  script:
+    - ssh user@server "cd /path/to/app && git pull && npm install && pm2 restart app.js"
+
+=================================================
+
+
