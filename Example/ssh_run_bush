@@ -1,0 +1,14 @@
+deploy-to-review:
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  script:
+    - scp ./docker/.env.staging.lc ./docker/docker-compose-staging.yml provisioner@staging.lc:~/docker
+    - ssh provisioner@staging.lc 'bash -s' < ./docker/deploy.sh
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://www.$CI_COMMIT_REF_SLUG.labs.lc
+  only:
+    - develop
+    - docker
